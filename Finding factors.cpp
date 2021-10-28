@@ -1,4 +1,4 @@
-//Finding  Factors
+//Finding  Factors 
 
 /*The program takes an integer as input and print out its no. of factors and all the factors*/
 
