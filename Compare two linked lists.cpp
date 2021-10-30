@@ -1,244 +1,74 @@
-// C program to compare two linked lists
+// An iterative C program to check if two linked lists are
+// identical or not
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>
 
-#include <stdio.h>
-
-#include <stdlib.h>
-
-//Self-referential structure to create node.
-
-typedef struct tmp {
-
-    int item;
-
-    struct tmp* next;
-
-} Node;
-
-//structure for create linked list.
-
-typedef struct
-
-    {
-
-    Node* head;
-
-    Node* tail;
-
-} List;
-
-//Initialize List
-
-void initList(List* lp)
-
+/* Structure for a linked list node */
+struct Node
 {
+	int data;
+	struct Node *next;
+};
 
-    lp->head = NULL;
+/* Returns true if linked lists a and b are identical,
+otherwise false */
+bool areIdentical(struct Node *a, struct Node *b)
+{
+	while (a != NULL && b != NULL)
+	{
+		if (a->data != b->data)
+			return false;
 
-    lp->tail = NULL;
+		/* If we reach here, then a and b are not NULL and
+		their data is same, so move to next nodes in both
+		lists */
+		a = a->next;
+		b = b->next;
+	}
 
+	// If linked lists are identical, then 'a' and 'b' must
+	// be NULL at this point.
+	return (a == NULL && b == NULL);
 }
 
-//Create node and return reference of it.
-
-Node* createNode(int item)
-
+/* UTILITY FUNCTIONS TO TEST fun1() and fun2() */
+/* Given a reference (pointer to pointer) to the head
+of a list and an int, push a new node on the front
+of the list. */
+void push(struct Node** head_ref, int new_data)
 {
+	/* allocate node */
+	struct Node* new_node =
+		(struct Node*) malloc(sizeof(struct Node));
 
-    Node* nNode;
+	/* put in the data */
+	new_node->data = new_data;
 
-    nNode = (Node*)malloc(sizeof(Node));
+	/* link the old list off the new node */
+	new_node->next = (*head_ref);
 
-    nNode->item = item;
-
-    nNode->next = NULL;
-
-    return nNode;
-
+	/* move the head to point to the new node */
+	(*head_ref) = new_node;
 }
 
-//Add new item at the end of list.
-
-void addAtTail(List* lp, int item)
-
-{
-
-    Node* node;
-
-    node = createNode(item);
-
-    //if list is empty.
-
-    if (lp->head == NULL) {
-
-        lp->head = node;
-
-        lp->tail = node;
-
-    }
-
-    else {
-
-        lp->tail->next = node;
-
-        lp->tail = lp->tail->next;
-
-    }
-
-}
-
-//Add new item at begning of the list.
-
-void addAtHead(List* lp, int item)
-
-{
-
-    Node* node;
-
-    node = createNode(item);
-
-    //if list is empty.
-
-    if (lp->head == NULL) {
-
-        lp->head = node;
-
-        lp->tail = node;
-
-    }
-
-    else {
-
-        node->next = lp->head;
-
-        lp->head = node;
-
-    }
-
-}
-
-//To print list from start to end of the list.
-
-void printList(List* lp)
-
-{
-
-    Node* node;
-
-    if (lp->head == NULL) {
-
-        printf("\nEmpty List");
-
-        return;
-
-    }
-
-    node = lp->head;
-
-    while (node != NULL) {
-
-        printf("| %05d |", node->item);
-
-        node = node->next;
-
-        if (node != NULL)
-
-            printf("--->");
-
-    }
-
-    printf("\n\n");
-
-}
-
-int compareLists(List* lp1, List* lp2)
-
-{
-
-    Node* temp1;
-
-    Node* temp2;
-
-    int flag = 1;
-
-    temp1 = lp1->head;
-
-    temp2 = lp2->head;
-
-    while (temp1 != NULL && temp2 != NULL) {
-
-        if (temp1->item != temp2->item) {
-
-            flag = 0;
-
-            break;
-
-        }
-
-        temp1 = temp1->next;
-
-        temp2 = temp2->next;
-
-    }
-
-    return flag;
-
-}
-
-//Main function to execute program.
-
+/* Driver program to test above function */
 int main()
-
 {
+	/* The constructed linked lists are :
+	a: 3->2->1
+	b: 3->2->1 */
+	struct Node *a = NULL;
+	struct Node *b = NULL;
+	push(&a, 1);
+	push(&a, 2);
+	push(&a, 3);
+	push(&b, 1);
+	push(&b, 2);
+	push(&b, 3);
 
-    List* lp1;
+	areIdentical(a, b)? printf("Identical"):
+						printf("Not identical");
 
-    List* lp2;
-
-    lp1 = (List*)malloc(sizeof(List));
-
-    lp2 = (List*)malloc(sizeof(List));
-
-    initList(lp1);
-
-    initList(lp2);
-
-    addAtTail(lp1, 100);
-
-    addAtTail(lp1, 200);
-
-    addAtHead(lp1, 300);
-
-    addAtHead(lp1, 400);
-
-    addAtHead(lp1, 500);
-
-    addAtTail(lp2, 100);
-
-    addAtTail(lp2, 200);
-
-    addAtHead(lp2, 300);
-
-    addAtHead(lp2, 400);
-
-    addAtHead(lp2, 500);
-
-    printf("List1:\n");
-
-    printList(lp1);
-
-    printf("List2:\n");
-
-    printList(lp2);
-
-    if (compareLists(lp1, lp2))
-
-        printf("Both lists are same\n");
-
-    else
-
-        printf("Lists are different\n");
-
-    return 0;
-
+	return 0;
 }
-
